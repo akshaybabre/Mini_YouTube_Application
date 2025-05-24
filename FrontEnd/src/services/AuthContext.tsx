@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const adminToken = localStorage.getItem('adminToken');
       if (adminToken) {
         try {
-          const response = await axios.get('https://mini-youtube-fdhn.onrender.com/api/admin/profile', {
+          const response = await axios.get('http://localhost:5000/api/admin/profile', {
             headers: { Authorization: `Bearer ${adminToken}` },
           });
           const adminData = response.data;
@@ -106,7 +106,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           localStorage.setItem('userToken', token);
 
           const response = await axios.post(
-            'https://mini-youtube-fdhn.onrender.com/api/auth/login',
+            'http://localhost:5000/api/auth/login',
             {},
             {
               headers: { Authorization: `Bearer ${token}` },
@@ -133,7 +133,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const token = localStorage.getItem('userToken');
         if (token) {
           try {
-            const response = await axios.get('https://mini-youtube-fdhn.onrender.com/api/auth/me', {
+            const response = await axios.get('http://localhost:5000/api/auth/me', {
               headers: { Authorization: `Bearer ${token}` },
             });
             setUser({
@@ -188,7 +188,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setError(null);
 
     try {
-      const mongoCheck = await axios.post('https://mini-youtube-fdhn.onrender.com/api/manual/check-user', { email });
+      const mongoCheck = await axios.post('http://localhost:5000/api/manual/check-user', { email });
       if (mongoCheck.data.exists) {
         throw new Error(
           'This email is already registered. Please use a different email or log in.'
@@ -197,7 +197,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       const userId = `${email.split('@')[0]}-${Date.now()}`;
 
-      const response = await axios.post('https://mini-youtube-fdhn.onrender.com/api/manual/signup', {
+      const response = await axios.post('http://localhost:5000/api/manual/signup', {
         userId,
         username: name,
         email,
@@ -228,7 +228,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post('https://mini-youtube-fdhn.onrender.com/api/manual/login', {
+      const response = await axios.post('http://localhost:5000/api/manual/login', {
         email,
         password,
       });
@@ -283,7 +283,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem('userToken', token);
 
       await axios.post(
-        'https://mini-youtube-fdhn.onrender.com/api/auth/login',
+        'http://localhost:5000/api/auth/login',
         {},
         {
           headers: { Authorization: `Bearer ${token}` },

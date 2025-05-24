@@ -1,10 +1,10 @@
 import admin from 'firebase-admin';
-import 'dotenv/config'; // ESM ke liye dotenv import
+import 'dotenv/config';
 
 const serviceAccount = {
   type: "service_account",
   project_id: process.env.FIREBASE_PROJECT_ID,
-  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'), // \n ko actual newlines mein convert kar
+  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
   client_email: process.env.FIREBASE_CLIENT_EMAIL,
   client_id: process.env.FIREBASE_CLIENT_ID,
   auth_uri: "https://accounts.google.com/o/oauth2/auth",

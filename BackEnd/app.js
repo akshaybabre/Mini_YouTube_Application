@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet'; // 👈 Add this line
+import helmet from 'helmet';
 
 import authRoutes from './routes/authRoutes.js';
 import adminAuthRoutes from './routes/adminAuthRoutes.js';
@@ -16,18 +16,32 @@ import videos from './routes/videos.js';
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5173', // Local development
+    'https://mini-youtube-frontend.onrender.com' // Render frontend URL
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
-// ✅ Add Helmet CSP Here
+// Helmet CSP Configuration
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "'unsafe-inline'", "blob:"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:", "blob:"],
-      connectSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "blob:", "https://*.firebasestorage.app"], // Allow Firebase Storage for images/videos
+      connectSrc: [
+        "'self'",
+        "https://mini-youtube-backend.onrender.com", // Backend API
+        "https://*.googleapis.com", // Firebase APIs
+        "wss://*.firebaseio.com" // Firebase WebSocket
+      ],
       objectSrc: ["'none'"],
       frameSrc: ["'self'"],
     },
@@ -45,5 +59,10 @@ app.use('/api/interact', userInteractionRoutes);
 app.use('/api/watchlist', watchlistRoutes);
 app.use('/api/manual', manualAuthRoutes);
 app.use('/api/public/videos', videos);
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'Backend is running' });
+});
 
 export default app;
