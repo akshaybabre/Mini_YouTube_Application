@@ -70,7 +70,7 @@ const UploadModal: React.FC<UploadModalProps> = ({
           const token = localStorage.getItem('adminToken');
           if (!token) throw new Error('Admin token not found. Please log in again.');
 
-          const response = await fetch('http://localhost:5000/api/admin/categories', {
+          const response = await fetch('https://mini-youtube-fdhn.onrender.com/api/admin/categories', {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -158,8 +158,8 @@ const UploadModal: React.FC<UploadModalProps> = ({
 
       const method = selectedVideo ? 'PUT' : 'POST';
       const url = selectedVideo
-        ? `http://localhost:5000/api/admin/videos/${selectedVideo.videoId}`
-        : 'http://localhost:5000/api/admin/videos';
+        ? `https://mini-youtube-fdhn.onrender.com/api/admin/videos/${selectedVideo.videoId}`
+        : 'https://mini-youtube-fdhn.onrender.com/api/admin/videos';
 
       const response = await fetch(url, {
         method,

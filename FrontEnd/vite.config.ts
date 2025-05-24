@@ -7,7 +7,7 @@ import { defineConfig } from 'vite';
      server: {
        proxy: {
          '/api': {
-           target: 'http://localhost:5000',
+           target: 'https://mini-youtube-fdhn.onrender.com',
            changeOrigin: true,
            rewrite: (path) => path.replace(/^\/api/, ''),
          },

@@ -57,7 +57,7 @@ const AdminDash: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch('http://localhost:5000/api/admin/profile', {
+      const res = await fetch('https://mini-youtube-fdhn.onrender.com/api/admin/profile', {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
@@ -81,7 +81,7 @@ const AdminDash: React.FC = () => {
     setHasUsersFetchFailed(false);
     setShowUsersRetry(false);
     try {
-      const res = await fetch('http://localhost:5000/api/admin/users', {
+      const res = await fetch('https://mini-youtube-fdhn.onrender.com/api/admin/users', {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
@@ -106,7 +106,7 @@ const AdminDash: React.FC = () => {
     setHasVideosFetchFailed(false);
     setShowVideosRetry(false);
     try {
-      const res = await fetch('http://localhost:5000/api/admin/videos', {
+      const res = await fetch('https://mini-youtube-fdhn.onrender.com/api/admin/videos', {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
@@ -163,7 +163,7 @@ const AdminDash: React.FC = () => {
   const handleDeleteUser = async (id: string) => {
     const token = localStorage.getItem('adminToken');
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/users/${id}`, {
+      const res = await fetch(`https://mini-youtube-fdhn.onrender.com/api/admin/users/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -185,7 +185,7 @@ const AdminDash: React.FC = () => {
   const handleDeleteVideo = async (videoId: string) => {
     const token = localStorage.getItem('adminToken');
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/videos/${videoId}`, {
+      const res = await fetch(`https://mini-youtube-fdhn.onrender.com/api/admin/videos/${videoId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

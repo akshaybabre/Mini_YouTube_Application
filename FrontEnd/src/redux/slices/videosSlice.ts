@@ -34,7 +34,7 @@ export const fetchVideos = createAsyncThunk('videos/fetchVideos', async (_, { re
     const token = localStorage.getItem('userToken');
     if (!token) throw new Error('No token found');
 
-    const response = await fetch('http://localhost:5000/api/public/videos', {
+    const response = await fetch('https://mini-youtube-fdhn.onrender.com/api/public/videos', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -64,7 +64,7 @@ export const fetchVideosWithSearch = createAsyncThunk(
       const token = localStorage.getItem('userToken');
       if (!token) throw new Error('No token found');
 
-      const response = await fetch(`http://localhost:5000/api/public/videos?search=${encodeURIComponent(searchQuery)}`, {
+      const response = await fetch(`https://mini-youtube-fdhn.onrender.com/api/public/videos?search=${encodeURIComponent(searchQuery)}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

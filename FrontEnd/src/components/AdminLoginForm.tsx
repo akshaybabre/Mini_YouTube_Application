@@ -51,7 +51,7 @@ const AdminLoginForm: React.FC = () => {
   ) => {
     try {
       setError(null);
-      const response = await axios.post('http://localhost:5000/api/admin/login', values);
+      const response = await axios.post('https://mini-youtube-fdhn.onrender.com/api/admin/login', values);
       const { token, admin } = response.data;
 
       localStorage.setItem('adminToken', token);
