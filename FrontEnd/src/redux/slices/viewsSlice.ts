@@ -17,7 +17,7 @@ export const incrementAllViews = createAsyncThunk(
       const token = localStorage.getItem('userToken');
       if (!token) throw new Error('No token found');
 
-      const response = await fetch('http://localhost:5000/api/videos/increment-all-views', {
+      const response = await fetch('https://mini-youtube-backend-hnra.onrender.com/api/videos/increment-all-views', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

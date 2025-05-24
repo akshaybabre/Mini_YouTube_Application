@@ -34,7 +34,7 @@ export const fetchWatchlist = createAsyncThunk(
       const token = localStorage.getItem('userToken');
       if (!token) throw new Error('No token found');
 
-      const response = await fetch('http://localhost:5000/api/watchlist', {
+      const response = await fetch('https://mini-youtube-backend-hnra.onrender.com/api/watchlist', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -65,7 +65,7 @@ export const addToWatchlist = createAsyncThunk(
       const token = localStorage.getItem('userToken');
       if (!token) throw new Error('No token found');
 
-      const response = await fetch(`http://localhost:5000/api/watchlist/${videoId}`, {
+      const response = await fetch(`https://mini-youtube-backend-hnra.onrender.com/api/watchlist/${videoId}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -78,7 +78,7 @@ export const addToWatchlist = createAsyncThunk(
       }
 
        await response.json();
-      const videoResponse = await fetch(`http://localhost:5000/api/public/videos`, {
+      const videoResponse = await fetch(`https://mini-youtube-backend-hnra.onrender.com/api/public/videos`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -111,7 +111,7 @@ export const removeFromWatchlist = createAsyncThunk(
       const token = localStorage.getItem('userToken');
       if (!token) throw new Error('No token found');
 
-      const response = await fetch(`http://localhost:5000/api/watchlist/${videoId}`, {
+      const response = await fetch(`https://mini-youtube-backend-hnra.onrender.com/api/watchlist/${videoId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
