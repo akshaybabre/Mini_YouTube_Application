@@ -14,12 +14,12 @@ if (!MONGO_URI) {
 
 mongoose.connect(MONGO_URI, { dbName: 'mini-YT' })
   .then(() => {
-    console.log('MongoDB connected successfully');
+    console.log('✅ MongoDB connected successfully');
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
   })
   .catch(err => {
-    console.error('MongoDB connection failed:', err.message);
+    console.error('❌ MongoDB connection failed:', err.message);
     process.exit(1);
   });
