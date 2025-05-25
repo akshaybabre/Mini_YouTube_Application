@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ytLogo from '../assets/yt.png';
-import { Search, ListVideo, X, Eye, PlusCircle } from 'lucide-react';
+import { Search, ListVideo, X, Eye, PlusCircle, MinusCircle } from 'lucide-react'; // Add MinusCircle import
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
@@ -288,7 +288,11 @@ const UserDashHeader: React.FC<UserDashHeaderProps> = ({ onSearch }) => {
                                 : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
                             }`}
                           >
-                            <PlusCircle className="w-5 h-5 mr-2" />
+                            {isInWatchlist ? (
+                              <MinusCircle className="w-5 h-5 mr-2" /> // Show MinusCircle for remove
+                            ) : (
+                              <PlusCircle className="w-5 h-5 mr-2" /> // Show PlusCircle for add
+                            )}
                             {isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
                           </button>
                         </div>

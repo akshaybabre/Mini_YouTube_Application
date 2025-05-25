@@ -1,5 +1,5 @@
 import React from 'react';
-import { Eye, PlusCircle } from 'lucide-react';
+import { Eye, PlusCircle, MinusCircle } from 'lucide-react'; // Add MinusCircle import
 import { useAuth } from '../services/AuthContext';
 import CustomLikeButton from './CustomLikeButton';
 
@@ -91,7 +91,11 @@ const VideoCard: React.FC<VideoCardProps> = ({
                       : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
                   }`}
                 >
-                  <PlusCircle className="w-5 h-5 mr-2" />
+                  {isInWatchlist ? (
+                    <MinusCircle className="w-5 h-5 mr-2" /> // Show MinusCircle for remove
+                  ) : (
+                    <PlusCircle className="w-5 h-5 mr-2" /> // Show PlusCircle for add
+                  )}
                   {isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
                 </button>
               </div>

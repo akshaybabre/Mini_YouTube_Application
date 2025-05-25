@@ -77,7 +77,7 @@ export const addToWatchlist = createAsyncThunk(
         throw new Error(errorData.message || 'Failed to add to watchlist');
       }
 
-       await response.json();
+      await response.json();
       const videoResponse = await fetch(`https://mini-youtube-backend-hnra.onrender.com/api/public/videos`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -155,8 +155,7 @@ const watchlistSlice = createSlice({
         state.error = action.payload as string;
       })
       .addCase(addToWatchlist.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
+        state.error = null; // Remove status: 'loading'
       })
       .addCase(addToWatchlist.fulfilled, (state, action) => {
         state.status = 'succeeded';
@@ -167,8 +166,7 @@ const watchlistSlice = createSlice({
         state.error = action.payload as string;
       })
       .addCase(removeFromWatchlist.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
+        state.error = null; // Remove status: 'loading'
       })
       .addCase(removeFromWatchlist.fulfilled, (state, action) => {
         state.status = 'succeeded';
