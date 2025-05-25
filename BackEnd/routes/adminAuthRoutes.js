@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import Admin from '../models/Admin.js';
 
 const router = express.Router();
+console.log('✅ Admin auth routes loaded');
 
 // Admin Registration Route
 router.post('/register', async (req, res) => {

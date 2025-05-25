@@ -51,6 +51,7 @@ app.use(
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminAuthRoutes);
+console.log('✅ Admin auth routes registered');
 app.use('/api/admin/videos', videoAdminRoutes);
 app.use('/api/admin/categories', categoryAdminRoutes);
 app.use('/api/admin/users', userAdminRoutes);
