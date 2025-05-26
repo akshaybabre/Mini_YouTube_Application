@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ytLogo from '../assets/yt.png';
-import { Search, ListVideo, X, Eye, PlusCircle, MinusCircle } from 'lucide-react'; // Add MinusCircle import
+import { Search, ListVideo, X, Eye, PlusCircle, MinusCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
@@ -18,6 +18,7 @@ const UserDashHeader: React.FC<UserDashHeaderProps> = ({ onSearch }) => {
   const [rightMenuOpen, setRightMenuOpen] = useState<boolean>(false);
   const [watchlistOpen, setWatchlistOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isInteracting, setIsInteracting] = useState<string | null>(null); // Loading state for like/dislike
   const navigate = useNavigate();
   const { logout, user } = useAuth();
   const dispatch = useAppDispatch();
@@ -46,20 +47,48 @@ const UserDashHeader: React.FC<UserDashHeaderProps> = ({ onSearch }) => {
     }
   };
 
-  const handleLike = (videoId: string) => {
+  const handleLike = async (videoId: string) => {
     if (!user) {
       logout();
       return;
     }
-    dispatch(toggleLike(videoId));
+
+    const videoToUpdate = watchlistVideos.find((video) => video.videoId === videoId);
+    if (!videoToUpdate) return;
+
+    setIsInteracting(videoId); // Show loading state
+    try {
+      const result = await dispatch(toggleLike(videoId));
+      if ('error' in result && result.error) {
+        throw new Error((result.payload as any)?.message || 'Failed to like video');
+      }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to like video');
+    } finally {
+      setIsInteracting(null); // Hide loading state
+    }
   };
 
-  const handleDislike = (videoId: string) => {
+  const handleDislike = async (videoId: string) => {
     if (!user) {
       logout();
       return;
     }
-    dispatch(toggleDislike(videoId));
+
+    const videoToUpdate = watchlistVideos.find((video) => video.videoId === videoId);
+    if (!videoToUpdate) return;
+
+    setIsInteracting(videoId); // Show loading state
+    try {
+      const result = await dispatch(toggleDislike(videoId));
+      if ('error' in result && result.error) {
+        throw new Error((result.payload as any)?.message || 'Failed to dislike video');
+      }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to dislike video');
+    } finally {
+      setIsInteracting(null); // Hide loading state
+    }
   };
 
   const handleToggleWatchlist = async (videoId: string, isInWatchlist: boolean) => {
@@ -118,7 +147,7 @@ const UserDashHeader: React.FC<UserDashHeaderProps> = ({ onSearch }) => {
               value={searchQuery}
               onChange={handleSearchChange}
             />
-            <button className="bg-gray-800 text-white px-4 py-2 rounded-r-full border-l border-gray-300 hover:bg-gray-700 transition-all duration-200">
+            <button className="bg-gray-800 text-white px-4 py-2 rounded-r-full border-l border-gray-300 hover:bg-gray-700 transition-all duration: 200">
               <Search size={18} />
             </button>
           </motion.div>
@@ -185,7 +214,7 @@ const UserDashHeader: React.FC<UserDashHeaderProps> = ({ onSearch }) => {
               value={searchQuery}
               onChange={handleSearchChange}
             />
-            <button className="bg-gray-800 text-white px-4 py-2 rounded-r-full border-l border-gray-300 hover:bg-gray-700 transition-all duration-200">
+            <button className="bg-gray-800 text-white px-4 py-2 rounded-r-full border-l border-gray-300 hover:bg-gray-700 transition-all duration: 200">
               <Search size={18} />
             </button>
           </div>
@@ -267,12 +296,14 @@ const UserDashHeader: React.FC<UserDashHeaderProps> = ({ onSearch }) => {
                                 checked={hasLiked}
                                 onClick={() => handleLike(video.videoId)}
                                 count={video.likes.length}
+                                disabled={isInteracting === video.videoId}
                               />
                               <CustomLikeButton
                                 type="dislike"
                                 checked={hasDisliked}
                                 onClick={() => handleDislike(video.videoId)}
                                 count={video.dislikes.length}
+                                disabled={isInteracting === video.videoId}
                               />
                             </div>
                             <div className="flex items-center space-x-2">
@@ -289,9 +320,9 @@ const UserDashHeader: React.FC<UserDashHeaderProps> = ({ onSearch }) => {
                             }`}
                           >
                             {isInWatchlist ? (
-                              <MinusCircle className="w-5 h-5 mr-2" /> // Show MinusCircle for remove
+                              <MinusCircle className="w-5 h-5 mr-2" />
                             ) : (
-                              <PlusCircle className="w-5 h-5 mr-2" /> // Show PlusCircle for add
+                              <PlusCircle className="w-5 h-5 mr-2" />
                             )}
                             {isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
                           </button>

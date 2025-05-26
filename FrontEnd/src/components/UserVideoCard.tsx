@@ -1,5 +1,5 @@
 import React from 'react';
-import { Eye, PlusCircle, MinusCircle } from 'lucide-react'; // Add MinusCircle import
+import { Eye, PlusCircle, MinusCircle } from 'lucide-react';
 import { useAuth } from '../services/AuthContext';
 import CustomLikeButton from './CustomLikeButton';
 
@@ -24,6 +24,7 @@ interface VideoCardProps {
   handleDislike: (videoId: string) => void;
   toggleWatchlist: (videoId: string, isInWatchlist: boolean) => void;
   watchlistVideos: Video[];
+  isInteracting: string | null; // Add isInteracting prop
 }
 
 const VideoCard: React.FC<VideoCardProps> = ({
@@ -32,6 +33,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
   handleDislike,
   toggleWatchlist,
   watchlistVideos,
+  isInteracting,
 }) => {
   const { user } = useAuth();
   const userId = (user as any)?._id || (user as any)?.id || '';
@@ -70,12 +72,14 @@ const VideoCard: React.FC<VideoCardProps> = ({
                       checked={hasLiked}
                       onClick={() => handleLike(video.videoId)}
                       count={video.likes.length}
+                      disabled={isInteracting === video.videoId} // Disable during interaction
                     />
                     <CustomLikeButton
                       type="dislike"
                       checked={hasDisliked}
                       onClick={() => handleDislike(video.videoId)}
                       count={video.dislikes.length}
+                      disabled={isInteracting === video.videoId} // Disable during interaction
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -92,9 +96,9 @@ const VideoCard: React.FC<VideoCardProps> = ({
                   }`}
                 >
                   {isInWatchlist ? (
-                    <MinusCircle className="w-5 h-5 mr-2" /> // Show MinusCircle for remove
+                    <MinusCircle className="w-5 h-5 mr-2" />
                   ) : (
-                    <PlusCircle className="w-5 h-5 mr-2" /> // Show PlusCircle for add
+                    <PlusCircle className="w-5 h-5 mr-2" />
                   )}
                   {isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
                 </button>

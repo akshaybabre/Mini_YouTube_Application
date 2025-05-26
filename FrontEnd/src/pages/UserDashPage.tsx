@@ -38,11 +38,8 @@ const UserDashPage: React.FC = () => {
   const [showWatchlistRetry, setShowWatchlistRetry] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [hasIncrementedViews, setHasIncrementedViews] = useState<boolean>(false);
-  const [localWatchlist, setLocalWatchlist] = useState<Video[]>(watchlistVideos);
-
-  useEffect(() => {
-    setLocalWatchlist(watchlistVideos);
-  }, [watchlistVideos]);
+  const [isInteracting, setIsInteracting] = useState<string | null>(null); // Loading state for like/dislike
+  const userId = (user as any)?._id || (user as any)?.id || '';
 
   useEffect(() => {
     let isMounted = true;
@@ -106,7 +103,21 @@ const UserDashPage: React.FC = () => {
       logout();
       return;
     }
-    await dispatch(toggleLike(videoId));
+
+    const videoToUpdate = videos.find((video) => video.videoId === videoId);
+    if (!videoToUpdate) return;
+
+    setIsInteracting(videoId); // Show loading state
+    try {
+      const result = await dispatch(toggleLike(videoId));
+      if ('error' in result && result.error) {
+        throw new Error((result.payload as any)?.message || 'Failed to like video');
+      }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to like video');
+    } finally {
+      setIsInteracting(null); // Hide loading state
+    }
   };
 
   const handleDislike = async (videoId: string) => {
@@ -114,7 +125,21 @@ const UserDashPage: React.FC = () => {
       logout();
       return;
     }
-    await dispatch(toggleDislike(videoId));
+
+    const videoToUpdate = videos.find((video) => video.videoId === videoId);
+    if (!videoToUpdate) return;
+
+    setIsInteracting(videoId); // Show loading state
+    try {
+      const result = await dispatch(toggleDislike(videoId));
+      if ('error' in result && result.error) {
+        throw new Error((result.payload as any)?.message || 'Failed to dislike video');
+      }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to dislike video');
+    } finally {
+      setIsInteracting(null); // Hide loading state
+    }
   };
 
   const handleToggleWatchlist = async (videoId: string, isInWatchlist: boolean) => {
@@ -125,13 +150,6 @@ const UserDashPage: React.FC = () => {
 
     const videoToToggle = videos.find((video) => video.videoId === videoId);
     if (!videoToToggle) return;
-
-    let previousWatchlist = [...localWatchlist];
-    if (isInWatchlist) {
-      setLocalWatchlist((prev) => prev.filter((v) => v.videoId !== videoId));
-    } else {
-      setLocalWatchlist((prev) => [...prev, videoToToggle]);
-    }
 
     try {
       if (isInWatchlist) {
@@ -146,7 +164,6 @@ const UserDashPage: React.FC = () => {
         }
       }
     } catch (err) {
-      setLocalWatchlist(previousWatchlist);
       alert(err instanceof Error ? err.message : 'Unknown error occurred');
     }
   };
@@ -217,7 +234,8 @@ const UserDashPage: React.FC = () => {
             handleLike={handleLike}
             handleDislike={handleDislike}
             toggleWatchlist={handleToggleWatchlist}
-            watchlistVideos={localWatchlist}
+            watchlistVideos={watchlistVideos}
+            isInteracting={isInteracting} // Pass loading state to VideoCard
           />
         ) : null}
       </main>

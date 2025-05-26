@@ -55,6 +55,15 @@
   transform: scale(1.1);
 }
 
+.container input:disabled ~ .checkmark {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.container input:disabled ~ .checkmark:hover {
+  transform: none;
+}
+
 @keyframes like_401 {
   0% {
     transform: scale(0);

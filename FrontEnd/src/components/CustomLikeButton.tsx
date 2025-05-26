@@ -2,13 +2,14 @@ import React from 'react';
 import '../CustomCSS/CustomLikeButton.css';
 
 interface CustomLikeButtonProps {
+  type: 'like' | 'dislike';
   checked: boolean;
   onClick: () => void;
   count: number;
-  type: 'like' | 'dislike';
+  disabled?: boolean; // Retain disabled prop for loading state
 }
 
-const CustomLikeButton: React.FC<CustomLikeButtonProps> = ({ checked, onClick, count, type }) => {
+const CustomLikeButton: React.FC<CustomLikeButtonProps> = ({ type, checked, onClick, count, disabled }) => {
   return (
     <div className="flex items-center space-x-2">
       <label className="container">
@@ -16,6 +17,7 @@ const CustomLikeButton: React.FC<CustomLikeButtonProps> = ({ checked, onClick, c
           type="checkbox"
           checked={checked}
           onChange={onClick}
+          disabled={disabled} // Add disabled prop to input
         />
         <div className={`checkmark ${type}`}>
           <svg fill="none" viewBox="0 0 24 24">
@@ -33,7 +35,9 @@ const CustomLikeButton: React.FC<CustomLikeButtonProps> = ({ checked, onClick, c
           </svg>
         </div>
       </label>
-      <span className="text-sm text-gray-600">{count}</span>
+      <span className={`text-sm ${disabled ? 'text-gray-400' : 'text-gray-600'}`}>
+        {count}
+      </span>
     </div>
   );
 };

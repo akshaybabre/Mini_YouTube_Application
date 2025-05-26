@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { toggleLike, toggleDislike } from './likesSlice'; // Import toggle actions
 
 interface Video {
   _id: string;
@@ -155,7 +156,7 @@ const watchlistSlice = createSlice({
         state.error = action.payload as string;
       })
       .addCase(addToWatchlist.pending, (state) => {
-        state.error = null; // Remove status: 'loading'
+        state.error = null;
       })
       .addCase(addToWatchlist.fulfilled, (state, action) => {
         state.status = 'succeeded';
@@ -166,7 +167,7 @@ const watchlistSlice = createSlice({
         state.error = action.payload as string;
       })
       .addCase(removeFromWatchlist.pending, (state) => {
-        state.error = null; // Remove status: 'loading'
+        state.error = null;
       })
       .addCase(removeFromWatchlist.fulfilled, (state, action) => {
         state.status = 'succeeded';
@@ -175,6 +176,31 @@ const watchlistSlice = createSlice({
       .addCase(removeFromWatchlist.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload as string;
+      })
+      // Add cases for toggleLike and toggleDislike to update watchlist items
+      .addCase(toggleLike.fulfilled, (state, action) => {
+        const { videoId, updatedVideo } = action.payload;
+        const index = state.items.findIndex((video) => video.videoId === videoId);
+        if (index !== -1) {
+          state.items[index] = {
+            ...updatedVideo,
+            uploadDate: new Date(updatedVideo.uploadDate).toISOString(),
+            createdAt: new Date(updatedVideo.createdAt).toISOString(),
+            updatedAt: new Date(updatedVideo.updatedAt).toISOString(),
+          };
+        }
+      })
+      .addCase(toggleDislike.fulfilled, (state, action) => {
+        const { videoId, updatedVideo } = action.payload;
+        const index = state.items.findIndex((video) => video.videoId === videoId);
+        if (index !== -1) {
+          state.items[index] = {
+            ...updatedVideo,
+            uploadDate: new Date(updatedVideo.uploadDate).toISOString(),
+            createdAt: new Date(updatedVideo.createdAt).toISOString(),
+            updatedAt: new Date(updatedVideo.updatedAt).toISOString(),
+          };
+        }
       });
   },
 });
